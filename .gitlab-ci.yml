@@ -8,15 +8,15 @@ stages:
 
 services:
     - 
-before_script: |
-         npm install
-         sudo gitlab-runner register -n \
+before_script: 
+         - npm install
+         - sudo gitlab-runner register -n \
         --url https://gitlab.com/ \
         --registration-token M6VPfsAEZyH_jryxoZxM \
         --executor shell \
         --description "My Runner"
-        sudo usermod -aG docker gitlab-runner
-         sudo -u gitlab-runner -H docker info
+        - sudo usermod -aG docker gitlab-runner
+        - sudo -u gitlab-runner -H docker info
 building: 
     only: 
         - master
