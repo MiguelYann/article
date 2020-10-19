@@ -6,16 +6,18 @@ stages:
     - package
     - release
 
-    before_script:
+before_script:
         - npm install
 building: 
-    on: master
+    only: 
+        - master
     stage: build 
     script: 
         - npm build --prod
 
 dockerise:
-    on: master
+    only: 
+        - master
     stage: build
     script: 
     - docker build -t angularapp:1.0.0
