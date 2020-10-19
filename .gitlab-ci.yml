@@ -20,7 +20,7 @@ building:
 
 dockerise:
     dependencies:
-        - build_app
+        - building
     image: docker:stable
     services:
         - docker:18.09-dind
