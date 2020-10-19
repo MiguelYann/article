@@ -1,5 +1,4 @@
 image: node
-
 stages: 
     - verify 
     - build
@@ -7,14 +6,15 @@ stages:
     - release
  
 before_script: 
-         - npm install
-         - sudo gitlab-runner register -n \
+    - npm install
+    - sudo gitlab-runner register -n \
         --url https://gitlab.com/ \
         --registration-token M6VPfsAEZyH_jryxoZxM \
         --executor shell \
         --description "My Runner"
-        - sudo usermod -aG docker gitlab-runner
-        - sudo -u gitlab-runner -H docker info
+    - sudo usermod -aG docker gitlab-runner
+    - sudo -u gitlab-runner -H docker info
+    
 building: 
     only: 
         - master
@@ -23,7 +23,6 @@ building:
         - npm build --prod
 
 dockerise:
-    image: docker:19.03.12
     before_script:
         - docker-info
     only: 
