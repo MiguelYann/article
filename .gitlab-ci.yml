@@ -1,16 +1,22 @@
-image: docker:19.03.12
+image: node
 
-services: 
-    - docker:19.03.12-dind
-    - node:latest
 stages: 
     - verify 
     - build
     - package
     - release
 
-before_script:
-        - npm install
+services:
+    - 
+before_script: |
+         npm install
+         sudo gitlab-runner register -n \
+        --url https://gitlab.com/ \
+        --registration-token M6VPfsAEZyH_jryxoZxM \
+        --executor shell \
+        --description "My Runner"
+        sudo usermod -aG docker gitlab-runner
+         sudo -u gitlab-runner -H docker info
 building: 
     only: 
         - master
@@ -19,7 +25,9 @@ building:
         - npm build --prod
 
 dockerise:
-
+    image: docker:19.03.12
+    before_script:
+        - docker-info
     only: 
         - master
     stage: build
