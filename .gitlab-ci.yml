@@ -1,0 +1,23 @@
+image: node
+
+stages: 
+    - verify 
+    - build
+    - package
+    - release
+
+    before_script:
+        - npm install
+building: 
+    stage: build 
+    script: 
+        - npm build --prod
+
+dockerise
+    stage: build
+    script: 
+    - docker build -t angularapp:1.0.0
+    - mkdir imageDocker/
+    artifacts:
+        paths:
+            - imageDocker
