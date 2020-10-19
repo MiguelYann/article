@@ -14,8 +14,13 @@ building:
     script: 
         - npm install
         - npm build --prod
+    artifacts:
+        paths:
+            - dist/
 
 dockerise:
+    dependencies:
+        - build_app
     image: docker:stable
     services:
         - docker:18.09-dind
