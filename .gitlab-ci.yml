@@ -36,7 +36,10 @@
 #         paths:
 #             - imageDocker
 
-image: docker:latest
+image: docker:stable
+
+services:
+    - docker:18.09-dind
 
 before_script:
     - docker info
