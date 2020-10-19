@@ -1,45 +1,38 @@
-# image: node
-# stages: 
-#     - verify 
-#     - build
-#     - package
-#     - release
+image: node
+stages: 
+    - verify 
+    - build
+    - package
+    - release
  
-# before_script: 
-#     - npm install
-#     - sudo gitlab-runner register -n \
-#         --url https://gitlab.com/ \
-#         --registration-token M6VPfsAEZyH_jryxoZxM \
-#         --executor shell \
-#         --description "My Runner"
-#     - sudo usermod -aG docker gitlab-runner
-#     - sudo -u gitlab-runner -H docker info
+before_script: 
+    - npm install
     
-# building: 
-#     only: 
-#         - master
-#     stage: build 
-#     script: 
-#         - npm build --prod
+building: 
+    only: 
+        - master
+    stage: build 
+    script: 
+        - npm build --prod
 
-# dockerise:
-#     before_script:
-#         - docker-info
-#     only: 
-#         - master
-#     stage: build
-#     script: 
-#     - docker info
-#     - docker build -t angularapp:1.0.0 .
-#     - mkdir imageDocker/
-#     artifacts:
-#         paths:
-#             - imageDocker
+dockerise:
+    image: docker:stable
+    services:
+        - docker:18.09-dind
+    only: 
+        - master
+    stage: build
+    script: 
+    - docker info
+    - docker build -t angularapp:1.0.0 .
+    - mkdir imageDocker/
+    artifacts:
+        paths:
+            - imageDocker
 
-image: docker:stable
 
-services:
-    - docker:18.09-dind
+
+
 
 before_script:
     - docker info
