@@ -13,7 +13,7 @@ building:
     stage: build_app 
     script: 
         - npm install
-        - npm build --prod
+        - npm run build --prod
     artifacts:
         paths:
             - dist/
