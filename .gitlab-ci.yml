@@ -16,10 +16,13 @@ building:
         - npm build --prod
 
 dockerise:
+    image: docker:19.03.12
+
     only: 
         - master
     stage: build
     script: 
+    - docker info
     - docker build -t angularapp:1.0.0 .
     - mkdir imageDocker/
     artifacts:
