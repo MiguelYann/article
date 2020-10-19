@@ -6,14 +6,13 @@ stages:
     - package
     - release
  
-before_script: 
-    - npm install
     
 building: 
     only: 
         - master
     stage: build_app 
     script: 
+        - npm install
         - npm build --prod
 
 dockerise:
