@@ -5,9 +5,7 @@ stages:
     - build
     - package
     - release
-
-services:
-    - 
+ 
 before_script: 
          - npm install
          - sudo gitlab-runner register -n \
