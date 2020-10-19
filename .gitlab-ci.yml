@@ -1,7 +1,8 @@
 image: node
 stages: 
     - verify 
-    - build
+    - build_app
+    - build_container
     - package
     - release
  
@@ -11,7 +12,7 @@ before_script:
 building: 
     only: 
         - master
-    stage: build 
+    stage: build_app 
     script: 
         - npm build --prod
 
@@ -21,7 +22,7 @@ dockerise:
         - docker:18.09-dind
     only: 
         - master
-    stage: build
+    stage: build_container
     script: 
     - docker info
     - docker build -t angularapp:1.0.0 .
