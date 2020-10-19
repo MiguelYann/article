@@ -9,11 +9,13 @@ stages:
     before_script:
         - npm install
 building: 
+    on: master
     stage: build 
     script: 
         - npm build --prod
 
-dockerise
+dockerise:
+    on: master
     stage: build
     script: 
     - docker build -t angularapp:1.0.0
