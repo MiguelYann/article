@@ -40,3 +40,10 @@ image: docker:latest
 
 before_script:
     - docker info
+
+view :
+    stage: test
+    only:
+        - master
+    script:
+        - docker ps
