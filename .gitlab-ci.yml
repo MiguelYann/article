@@ -9,12 +9,7 @@ stages:
     - release
  
 
-🚦 test: 
-    stage: verify
-    only: 
-        - master
-    script: 
-        - npm run test
+
 ⚙ building: 
     image: node
     only: 
@@ -27,6 +22,14 @@ stages:
         paths:
             - dist/
 
+🚦 test: 
+    dependencies: 
+        - ⚙ building
+    stage: verify
+    only: 
+        - master
+    script: 
+        - npm run test
 🚢 dockerise:
     dependencies:
         - ⚙ building
