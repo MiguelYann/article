@@ -8,7 +8,13 @@ stages:
     - package
     - release
  
-    
+
+🚦 test: 
+    stage: verify
+    only: 
+        - master
+    script: 
+        - npm run test
 ⚙ building: 
     image: node
     only: 
