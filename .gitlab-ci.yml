@@ -23,13 +23,13 @@ stages:
             - dist/
 
 🚦 test: 
-    dependencies: 
-        - ⚙ building
+    image: node
     stage: verify
     only: 
         - master
     script: 
         - npm run test
+        
 🚢 dockerise:
     dependencies:
         - ⚙ building
