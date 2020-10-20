@@ -9,7 +9,7 @@ stages:
     - release
  
     
-⚙⚙building: 
+⚙ building: 
     image: node
     only: 
         - master
@@ -21,9 +21,9 @@ stages:
         paths:
             - dist/
 
-🚢🚢dockerise:
+🚢 dockerise:
     dependencies:
-        - building
+        - ⚙ building
 
     only: 
         - master
