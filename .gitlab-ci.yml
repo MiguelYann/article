@@ -2,55 +2,59 @@ default:
     image: docker:stable
 services:
     - docker:18.09-dind
+variables:
+    TAG_IMAGE: V2
+    IMAGE_NAME: "$ACR_URL"/myimg
 stages: 
     - verify 
     - build_app
     - build_container
     - login
+    - tag_image
     - package
-    - release
+    - releasing
 
 # before_script:
 #     - docker info
  
 
 
-# ⚙ building: 
+⚙ building: 
+    image: node
+    only: 
+        - master
+    stage: build_app 
+    script: 
+        - npm install
+        - npm run build --prod
+    artifacts:
+        paths:
+            - dist/
+
+# 🚦 test: 
 #     image: node
+#     stage: verify
 #     only: 
 #         - master
-#     stage: build_app 
 #     script: 
 #         - npm install
-#         - npm run build --prod
-#     artifacts:
-#         paths:
-#             - dist/
-
-# # 🚦 test: 
-# #     image: node
-# #     stage: verify
-# #     only: 
-# #         - master
-# #     script: 
-# #         - npm install
-# #         - npm run test
+#         - npm run test
         
-# 🚢 dockerise:
-#     # dependencies:
-#     #     - ⚙ building
+🚢 dockerise:
+    # dependencies:
+    #     - ⚙ building
 
-#     only: 
-#         - master
-#     stage: build_container
-#     script: 
-#     - docker info
-#     - echo "docker yes"
-#     - docker build -t angularapp:1.0.0 .
-#     - mkdir imageDocker/
-#     artifacts:
-#         paths:
-#             - imageDocker
+    only: 
+        - master
+    stage: build_container
+    script: 
+    - docker info
+    - echo "docker yes"
+    - docker build -t "$IMAGE_NAME":"$TAG_IMAGE" .
+    - mkdir imageDocker/
+    release-cli: 
+        image: "$IMAGE_NAME"
+        tag_name: "$TAG_IMAGE"
 
 🔑login_acr: 
     stage: login
@@ -58,6 +62,16 @@ stages:
         - master
     script:
         - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
+
+# 📩tag_image:
+#     dependencies: 
+#         - 🚢 dockerise
+#     stage: tag_image
+#     only:
+#         - master
+#     script:
+#         - docker tag "$IMAGE_NAME" "$ACR_URL"/<imageDockerName>:<tag>
+
 
 ☁ push_acr: 
     
