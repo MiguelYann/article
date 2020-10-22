@@ -50,8 +50,9 @@ stages:
             - imageDocker
 
 ☁ push_acr: 
-    services:
-        - docker:18.09-dind
+    dependencies:
+        - 🚢 dockerise
+    
     image: microsoft/azure-cli
     stage: package
     only:
