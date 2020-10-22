@@ -1,10 +1,10 @@
-default:
-    image: docker:stable
+image: docker:stable
 services:
     - docker:18.09-dind
 variables:
-    TAG_IMAGE: V2
-    IMAGE_NAME: myimg
+    TAG_IMAGE: "V2"
+    IMAGE_NAME: "myimg"
+
 stages: 
     - verify 
     - build_app
@@ -14,12 +14,7 @@ stages:
     - package
     - deploy
 
-# before_script:
-#     - docker info
- 
-
-
-⚙ building: 
+⚙building: 
     image: node
     only: 
         - master
@@ -30,47 +25,34 @@ stages:
     artifacts:
         paths:
             - dist/
-
-# 🚦 test: 
-#     image: node
-#     stage: verify
-#     only: 
-#         - master
-#     script: 
-#         - npm install
-#         - npm run test
-        
-🚢 dockerise:
-
+ 
+🚢dockerise:
     dependencies:
-        - ⚙ building
-
+        - ⚙building
     only: 
         - master
     stage: build_container
     script: 
-    - docker info
-    - echo "docker yes"
-    - docker build -t "$IMAGE_NAME" .
-    - mkdir imageDocker/
-    - docker save "$IMAGE_NAME" > imageDocker/app.tar
-
+        - docker info
+        - echo "docker yes"
+        - docker build -t "$IMAGE_NAME" .
+        - mkdir imageDocker/
+        - docker save "$IMAGE_NAME" > imageDocker/app.tar
     artifacts:
         paths:
             - imageDocker
-    
 
- 📩tag_image:
-     dependencies: 
-         - 🚢 dockerise
-     stage: tag_image
-     only:
-         - master
-     script:
-         - docker load -i imageDocker/app.tar
-         - docker tag "$IMAGE_NAME" "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
-         - mkdir finalImage
-         - docker save "$ACR_URL"/"$IMAGE_NAME" > finalImage/appFinal.tar
+📩tag_image:
+    dependencies:
+        - 🚢dockerise
+    stage: tag_image
+    only:
+        - master
+    script:
+        - docker load -i imageDocker/app.tar
+        - docker tag "$IMAGE_NAME" "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
+        - mkdir finalImage
+        - docker save "$ACR_URL"/"$IMAGE_NAME" > finalImage/appFinal.tar
     artifacts:
         paths:
             - finalImage
@@ -83,7 +65,6 @@ stages:
         - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
 
 ☁ push_acr: 
-    
     stage: package
     only:
         - master
