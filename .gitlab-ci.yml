@@ -8,46 +8,46 @@ stages:
     - package
     - release
 
-before_script:
-    - docker info
+# before_script:
+#     - docker info
  
 
 
-# ⚙ building: 
+⚙ building: 
+    image: node
+    only: 
+        - master
+    stage: build_app 
+    script: 
+        - npm install
+        - npm run build --prod
+    artifacts:
+        paths:
+            - dist/
+
+# 🚦 test: 
 #     image: node
+#     stage: verify
 #     only: 
 #         - master
-#     stage: build_app 
 #     script: 
 #         - npm install
-#         - npm run build --prod
-#     artifacts:
-#         paths:
-#             - dist/
-
-# # 🚦 test: 
-# #     image: node
-# #     stage: verify
-# #     only: 
-# #         - master
-# #     script: 
-# #         - npm install
-# #         - npm run test
+#         - npm run test
         
-# 🚢 dockerise:
-#     dependencies:
-#         - ⚙ building
+🚢 dockerise:
+    dependencies:
+        - ⚙ building
 
-#     only: 
-#         - master
-#     stage: build_container
-#     script: 
-#     - docker info
-#     - docker build -t angularapp:1.0.0 .
-#     - mkdir imageDocker/
-#     artifacts:
-#         paths:
-#             - imageDocker
+    only: 
+        - master
+    stage: build_container
+    script: 
+    - docker info
+    - docker build -t angularapp:1.0.0 .
+    - mkdir imageDocker/
+    artifacts:
+        paths:
+            - imageDocker
 
 ☁ push_acr: 
     services:
