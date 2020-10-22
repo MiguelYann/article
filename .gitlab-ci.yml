@@ -78,16 +78,16 @@ stages:
     only:
         - master
     image: microsoft/azure-cli
-    script:
-        - az container create \
-        --resource-group "$RESOURCE_GROUP" \
-        --name "$ACI_NAME" \
-        --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" \
-         --dns-name-label "$DOMAIN_NAME" \
-        --ports "$PORT" \
-        --registry-login-server "$ACR_URL" \
-        --registry-username "$SERVICE_PRINCIPAL_ID" \
-        --registry-password "$SERVICE_PRINCIPAL_PASSWORD"
+    script: |
+         az container create\
+            --resource-group "$RESOURCE_GROUP" \
+            --name "$ACI_NAME" \
+            --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" \
+            --dns-name-label "$DOMAIN_NAME" \
+            --ports "$PORT" \
+            --registry-login-server "$ACR_URL" \
+            --registry-username "$SERVICE_PRINCIPAL_ID" \
+            --registry-password "$SERVICE_PRINCIPAL_PASSWORD"
 
 
 
