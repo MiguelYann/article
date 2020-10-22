@@ -4,7 +4,7 @@ services:
     - docker:18.09-dind
 variables:
     TAG_IMAGE: V2
-    IMAGE_NAME: "$ACR_URL"/myimg
+    IMAGE_NAME: myimg
 stages: 
     - verify 
     - build_app
@@ -12,7 +12,7 @@ stages:
     - login
     - tag_image
     - package
-    - releasing
+    - deploy
 
 # before_script:
 #     - docker info
@@ -41,8 +41,9 @@ stages:
 #         - npm run test
         
 🚢 dockerise:
-    # dependencies:
-    #     - ⚙ building
+
+    dependencies:
+        - ⚙ building
 
     only: 
         - master
@@ -50,11 +51,29 @@ stages:
     script: 
     - docker info
     - echo "docker yes"
-    - docker build -t "$IMAGE_NAME":"$TAG_IMAGE" .
+    - docker build -t "$IMAGE_NAME" .
     - mkdir imageDocker/
-    release-cli: 
-        image: "$IMAGE_NAME"
-        tag_name: "$TAG_IMAGE"
+    - docker save "$IMAGE_NAME" > imageDocker/app.tar
+
+    artifacts:
+        paths:
+            - imageDocker
+    
+
+ 📩tag_image:
+     dependencies: 
+         - 🚢 dockerise
+     stage: tag_image
+     only:
+         - master
+     script:
+         - docker load -i imageDocker/app.tar
+         - docker tag "$IMAGE_NAME" "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
+         - mkdir finalImage
+         - docker save "$ACR_URL"/"$IMAGE_NAME" > finalImage/appFinal.tar
+    artifacts:
+        paths:
+            - finalImage
 
 🔑login_acr: 
     stage: login
@@ -63,24 +82,23 @@ stages:
     script:
         - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
 
-# 📩tag_image:
-#     dependencies: 
-#         - 🚢 dockerise
-#     stage: tag_image
-#     only:
-#         - master
-#     script:
-#         - docker tag "$IMAGE_NAME" "$ACR_URL"/<imageDockerName>:<tag>
-
-
 ☁ push_acr: 
     
-    image: microsoft/azure-cli
     stage: package
     only:
         - master
-    script:         
-        - az
+    script:      
+        - docker load -i appFinal/appFinal.tar
+        - docker push "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
+
+🌧verify_azure:
+    stage: deploy
+    only:
+        - master
+    image: microsoft/azure-cli
+    script:
+        - az acr repository list --name "$ACR_NAME" --output table
+
 
 
 
