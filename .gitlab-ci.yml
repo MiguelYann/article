@@ -10,7 +10,7 @@ stages:
     - build_app
     - build_container
     - login
-    - tag_image
+    - tagging
     - package
     - deploy
     - realease
@@ -46,7 +46,7 @@ stages:
 📩tag_image:
     dependencies:
         - 🚢dockerise
-    stage: package
+    stage: tagging
     only:
         - master
     script:
@@ -60,7 +60,7 @@ stages:
 
 🔑login_acr: 
     
-    stage: package
+    stage: tagging
     only:
         - master
     script:
