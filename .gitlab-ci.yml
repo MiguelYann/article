@@ -13,6 +13,7 @@ stages:
     - tag_image
     - package
     - deploy
+    - realease
 
 ⚙building: 
     image: node
@@ -31,7 +32,7 @@ stages:
         - ⚙building
     only: 
         - master
-    stage: build_container
+    stage: build_app
     script: 
         - docker info
         - echo "docker yes"
@@ -45,7 +46,7 @@ stages:
 📩tag_image:
     dependencies:
         - 🚢dockerise
-    stage: tag_image
+    stage: package
     only:
         - master
     script:
@@ -58,7 +59,9 @@ stages:
             - finalImage
 
 🔑login_acr: 
-    stage: login
+    dependencies: 
+        - 📩tag_image
+    stage: package
     only:
         - master
     script:
@@ -69,7 +72,7 @@ stages:
     only:
         - master
     script:      
-        - docker load -i appFinal/appFinal.tar
+        - docker load -i finalImage/appFinal.tar
         - docker push "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
 
 🌧verify_azure:
@@ -84,3 +87,4 @@ stages:
 
 
 
+# Ameliorer la recuperation de l'artifact
