@@ -6,6 +6,7 @@ stages:
     - verify 
     - build_app
     - build_container
+    - login
     - package
     - release
 
@@ -51,15 +52,22 @@ stages:
 #         paths:
 #             - imageDocker
 
+🔑login_acr: 
+    stage: login
+    only:
+        - master
+    script:
+        - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
+
 ☁ push_acr: 
     
-    # image: microsoft/azure-cli
+    image: microsoft/azure-cli
     stage: package
     only:
         - master
     script: 
         - docker info
-        - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
+        
         - az
 
 
