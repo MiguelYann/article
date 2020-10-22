@@ -7,6 +7,9 @@ stages:
     - build_container
     - package
     - release
+
+variables: 
+    ACR: "mytregistry1"
  
 
 
@@ -22,14 +25,14 @@ stages:
         paths:
             - dist/
 
-🚦 test: 
-    image: node
-    stage: verify
-    only: 
-        - master
-    script: 
-        - npm install
-        - npm run test
+# 🚦 test: 
+#     image: node
+#     stage: verify
+#     only: 
+#         - master
+#     script: 
+#         - npm install
+#         - npm run test
         
 🚢 dockerise:
     dependencies:
@@ -45,6 +48,16 @@ stages:
     artifacts:
         paths:
             - imageDocker
+
+☁ push_acr: 
+    image: microsoft/azure-cli
+    stage: package
+    only:
+        - master
+    script: 
+        - az acr login --name "$ACR"
+        - az
+
 
 
 
