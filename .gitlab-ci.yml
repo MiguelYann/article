@@ -65,9 +65,7 @@ stages:
     stage: package
     only:
         - master
-    script: 
-        - docker info
-        
+    script:         
         - az
 
 
