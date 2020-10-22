@@ -2,8 +2,12 @@ image: docker:stable
 services:
     - docker:18.09-dind
 variables:
-    TAG_IMAGE: "V2.0.0"
+    TAG_IMAGE: "V2.0.1"
     IMAGE_NAME: "myimg"
+    RESOURCE_GROUP: "myResourceGroup"
+    ACI_NAME: "mytcontainerio"
+    DOMAIN_NAME: "myt-io"
+    PORT: "80"
 
 stages: 
     - verify 
@@ -75,7 +79,15 @@ stages:
         - master
     image: microsoft/azure-cli
     script:
-        - az acr repository list --name "$ACR_NAME" --output table
+        - az container create \
+        --resource-group "$RESOURCE_GROUP" \
+        --name "$ACI_NAME" \
+        --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" \
+         --dns-name-label "$DOMAIN_NAME" \
+        --ports "$PORT" \
+        --registry-login-server "$ACR_URL" \
+        --registry-username "$SERVICE_PRINCIPAL_ID" \
+        --registry-password "$SERVICE_PRINCIPAL_PASSWORD"
 
 
 
