@@ -50,6 +50,8 @@ before_script:
 #             - imageDocker
 
 ☁ push_acr: 
+    services:
+        - docker:18.09-dind
     image: microsoft/azure-cli
     stage: package
     only:
