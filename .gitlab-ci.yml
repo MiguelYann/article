@@ -35,15 +35,16 @@ stages:
 # #         - npm install
 # #         - npm run test
         
-# 🚢 dockerise:
-#     dependencies:
-#         - ⚙ building
+🚢 dockerise:
+    # dependencies:
+    #     - ⚙ building
 
-#     only: 
-#         - master
-#     stage: build_container
-#     script: 
-#     - docker info
+    only: 
+        - master
+    stage: build_container
+    script: 
+    - docker info
+    - echo "docker yes"
 #     - docker build -t angularapp:1.0.0 .
 #     - mkdir imageDocker/
 #     artifacts:
@@ -58,7 +59,7 @@ stages:
         - master
     script: 
         - docker info
-        - docker login -u "$ACR_NAME" -p "$ACR_TOKEN" "$ACR_URL"
+        - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
         - az
 
 
