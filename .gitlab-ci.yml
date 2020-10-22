@@ -8,8 +8,7 @@ stages:
     - package
     - release
 
-variables: 
-    ACR: "mytregistry1"
+
  
 
 
@@ -55,7 +54,7 @@ variables:
     only:
         - master
     script: 
-        - az acr login --name "$ACR"
+        - docker login -u "$ACR_NAME" -p "$ACR_TOKEN" "$ACR_URL"
         - az
 
 
