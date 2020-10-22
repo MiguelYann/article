@@ -1,4 +1,5 @@
-image: docker:stable
+default:
+    image: docker:stable
 services:
     - docker:18.09-dind
 stages: 
@@ -13,45 +14,43 @@ stages:
  
 
 
-⚙ building: 
-    image: node
-    only: 
-        - master
-    stage: build_app 
-    script: 
-        - npm install
-        - npm run build --prod
-    artifacts:
-        paths:
-            - dist/
-
-# 🚦 test: 
+# ⚙ building: 
 #     image: node
-#     stage: verify
 #     only: 
 #         - master
+#     stage: build_app 
 #     script: 
 #         - npm install
-#         - npm run test
-        
-🚢 dockerise:
-    dependencies:
-        - ⚙ building
+#         - npm run build --prod
+#     artifacts:
+#         paths:
+#             - dist/
 
-    only: 
-        - master
-    stage: build_container
-    script: 
-    - docker info
-    - docker build -t angularapp:1.0.0 .
-    - mkdir imageDocker/
-    artifacts:
-        paths:
-            - imageDocker
+# # 🚦 test: 
+# #     image: node
+# #     stage: verify
+# #     only: 
+# #         - master
+# #     script: 
+# #         - npm install
+# #         - npm run test
+        
+# 🚢 dockerise:
+#     dependencies:
+#         - ⚙ building
+
+#     only: 
+#         - master
+#     stage: build_container
+#     script: 
+#     - docker info
+#     - docker build -t angularapp:1.0.0 .
+#     - mkdir imageDocker/
+#     artifacts:
+#         paths:
+#             - imageDocker
 
 ☁ push_acr: 
-    dependencies:
-        - 🚢 dockerise
     
     image: microsoft/azure-cli
     stage: package
