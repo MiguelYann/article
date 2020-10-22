@@ -10,14 +10,11 @@ variables:
     PORT: "80"
 
 stages: 
-    - verify 
     - build_app
     - build_container
-    - login
     - tagging
     - package
     - deploy
-    - realease
 
 ⚙building: 
     image: node
@@ -79,6 +76,8 @@ stages:
         - master
     image: microsoft/azure-cli
     script: |
+        az login --service-principal --username "$SERVICE_PRINCIPAL_ID" --password "$SERVICE_PRINCIPAL_PASSWORD" --tenant "$TENANT_ID"
+
          az container create\
             --resource-group "$RESOURCE_GROUP" \
             --name "$ACI_NAME" \
