@@ -54,6 +54,7 @@ stages:
     only:
         - master
     script: 
+        - docker info
         - docker login -u "$ACR_NAME" -p "$ACR_TOKEN" "$ACR_URL"
         - az
 
