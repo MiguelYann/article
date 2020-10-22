@@ -32,7 +32,7 @@ stages:
         - ⚙building
     only: 
         - master
-    stage: build_app
+    stage: build_container
     script: 
         - docker info
         - echo "docker yes"
@@ -59,8 +59,7 @@ stages:
             - finalImage
 
 🔑login_acr: 
-    dependencies: 
-        - 📩tag_image
+    
     stage: package
     only:
         - master
