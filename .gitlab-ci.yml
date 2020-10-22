@@ -2,7 +2,7 @@ image: docker:stable
 services:
     - docker:18.09-dind
 variables:
-    TAG_IMAGE: "V2"
+    TAG_IMAGE: "V2.0.0"
     IMAGE_NAME: "myimg"
 
 stages: 
@@ -58,19 +58,14 @@ stages:
         paths:
             - finalImage
 
-🔑login_acr: 
-    
-    stage: tagging
-    only:
-        - master
-    script:
-        - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
 
+        
 ☁ push_acr: 
     stage: package
     only:
         - master
     script:      
+        - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
         - docker load -i finalImage/appFinal.tar
         - docker push "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
 
