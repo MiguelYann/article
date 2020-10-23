@@ -78,7 +78,7 @@ stages:
     script: |
         az login --service-principal --username "$AAD_ID" --password "$AAD_SECRET" --tenant "$TENANT_ID"
 
-         az container create\
+        az container create \
             --resource-group "$RESOURCE_GROUP" \
             --name "$ACI_NAME" \
             --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" \
