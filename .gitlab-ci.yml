@@ -78,16 +78,7 @@ stages:
     script: |
         az login --service-principal --username "$AAD_ID" --password "$AAD_SECRET" --tenant "$TENANT_ID"
 
-        az container create \
-            --resource-group "$RESOURCE_GROUP" \
-            --name "$ACI_NAME" \
-            --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" \
-            --dns-name-label "$DOMAIN_NAME" \
-            --ports "$PORT" \
-            --registry-login-server "$ACR_URL" \
-            --registry-username "$SERVICE_PRINCIPAL_ID" \
-            --registry-password "$SERVICE_PRINCIPAL_PASSWORD"
-
+        az container create --resource-group myResourceGroup --name aci-app-demo --image "$ACR_URL"/"IMAGE_NAME":"$TAG_IMAGE" --cpu 1 --memory 1 --registry-login-server "$ACR_URL" --registry-username "AAD_ID" --registry-password "$AAD_SECRET" --dns-name-label "$DOMAIN_NAME" --ports "$PORT"
 
 
 
