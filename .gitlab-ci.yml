@@ -45,8 +45,7 @@ stages:
             - imageDocker
 
 📩tag_image:
-    when:
-        - manual
+    when: manual
     dependencies:
         - 🚢dockerise
     stage: tagging
