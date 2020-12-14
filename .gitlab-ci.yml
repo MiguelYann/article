@@ -63,6 +63,7 @@ stages:
 
         
 ☁ push_acr: 
+    when: manual
     stage: package
     only:
         - master
@@ -73,6 +74,7 @@ stages:
         
 
 🌧verify_azure:
+    when: manual
     stage: deploy
     only:
         - master
