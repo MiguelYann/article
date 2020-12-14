@@ -1,5 +1,14 @@
 <p>
-    {{title}}
+    {{ title }}
 </p>
 
-<h2 class="content">Hey I'm on Azure By CI/CD 🎆🎈</h2>
+
+<h3>Update release</h3>
+
+<ul>
+    <li *ngFor="let item of list; let index = index;">
+        {{item}}
+    </li>
+</ul>
+
+<button (click)="title = 'Hack 😎'">Click on me</button>

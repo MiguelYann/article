@@ -2,11 +2,11 @@ image: docker:stable
 services:
     - docker:18.09-dind
 variables:
-    TAG_IMAGE: "V2.0.1"
-    IMAGE_NAME: "myimg"
+    TAG_IMAGE: "1.0.4"
+    IMAGE_NAME: "realease"
     RESOURCE_GROUP: "myResourceGroup"
-    ACI_NAME: "mytcontainerio"
-    DOMAIN_NAME: "myt-io"
+    ACI_NAME: "apptest"
+    DOMAIN_NAME: "sandboxx"
     PORT: "80"
 
 stages: 
@@ -69,6 +69,7 @@ stages:
         - docker login -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN" "$ACR_URL"
         - docker load -i finalImage/appFinal.tar
         - docker push "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
+        
 
 🌧verify_azure:
     stage: deploy
@@ -76,8 +77,7 @@ stages:
         - master
     image: microsoft/azure-cli
     script: |
-        az login --service-principal --username "$SERVICE_PRINCIPAL_ID" --password "$SERVICE_PRINCIPAL_PASSWORD" --tenant "$TENANT_ID"
-
+        az login --service-principal --username "$SERVICE_PRINCIPAL_ID" --password "$SERVICE_PRINCIPAL_PASSWORD"
          az container create\
             --resource-group "$RESOURCE_GROUP" \
             --name "$ACI_NAME" \
