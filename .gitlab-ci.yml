@@ -67,7 +67,7 @@ stages:
     only:
         - master
     script:      
-        - docker login "$ACR_URL":443 -u "$ACR_TOKEN_NAME" -p "$ACR_TOKEN"
+        - docker login "$ACR_URL" -u "$SERVICE_PRINCIPAL_ID" -p "$SERVICE_PRINCIPAL_PASSWORD"
         - docker load -i finalImage/appFinal.tar
         - docker push "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE"
         
