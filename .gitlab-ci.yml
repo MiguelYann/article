@@ -45,6 +45,7 @@ stages:
             - imageDocker
 
 📩tag_image:
+    when: manual
     dependencies:
         - 🚢dockerise
     stage: tagging
@@ -88,6 +89,7 @@ stages:
             --registry-username "$SERVICE_PRINCIPAL_ID" \
             --registry-password "$SERVICE_PRINCIPAL_PASSWORD"
 
+        az container create --resource-group myResourceGroup --name mytcontainer --image "$ACR_URL"/"$IMAGE_NAME":"$TAG_IMAGE" --cpu 1 --memory 1 --registry-login-server "$ACR_URL" --registry-username "$AAD_ID" --registry-password "$AAD_SECRET" --dns-name-label "$DOMAIN_NAME" --ports "$PORT"
 
 
 
